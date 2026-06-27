@@ -480,23 +480,285 @@
     color: var(--muted); font-size: 13px;
   }
 
-  @media(max-width:660px) {
-    .builds-layout { flex-direction: column; }
-    .char-sidebar { width: 100%; }
-    .char-list { flex-direction: row; flex-wrap: wrap; padding: 8px; }
-    .char-btn { width: auto; }
-    .char-btn-name { display: none; }
-    .char-avatar { width: 36px; height: 36px; font-size: 16px; }
-    .build-grid { grid-template-columns: 1fr; }
+  /* ══ VIDEO ══ */
+  .build-video-wrap {
+    position: relative; width: 100%; border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border); margin-bottom: 12px; background: #000;
+    cursor: pointer;
+  }
+  .build-video-thumb {
+    width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover;
+    opacity: .85; transition: opacity .2s;
+  }
+  .build-video-wrap:hover .build-video-thumb { opacity: 1; }
+  .build-video-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px;
+  }
+  .build-video-play {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,0,0,.85);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .2s, background .2s;
+    box-shadow: 0 4px 24px rgba(0,0,0,.5);
+  }
+  .build-video-wrap:hover .build-video-play { transform: scale(1.1); background: #ff0000; }
+  .build-video-play svg { width: 26px; height: 26px; fill: #fff; margin-left: 4px; }
+  .build-video-label {
+    color: #fff; font-size: 13px; font-weight: 600;
+    text-shadow: 0 1px 6px rgba(0,0,0,.8);
+    background: rgba(0,0,0,.45); padding: 4px 12px; border-radius: 20px;
   }
 
-  /* ══ END BUILDS ══ */
-  @media(max-width:600px) {
-    .grid { grid-template-columns: 1fr 1fr; }
+  /* ══ RESPONSIVE ══ */
+  @media(max-width:768px) {
+    header { padding: 32px 16px 28px; }
+    header h1 { font-size: clamp(20px, 6vw, 32px); }
+    .content { padding: 14px 10px 40px; }
+    .tabs { padding: 0 4px; gap: 0; }
+    .tab-btn { padding: 11px 8px; font-size: 11px; letter-spacing: 0; }
+
+    /* builds mobile */
+    .builds-layout { flex-direction: column; }
+    .char-sidebar { width: 100%; }
+    .char-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+      gap: 6px; padding: 8px;
+      flex-direction: unset; flex-wrap: unset;
+    }
+    .char-btn { flex-direction: column; padding: 6px 4px; border-radius: 8px; width: auto; }
+    .char-avatar { width: 42px; height: 42px; font-size: 18px; }
+    .char-btn-name { font-size: 10px; text-align: center; white-space: normal; line-height: 1.2; }
+    .char-btn-name .new-tag { display: none; }
+    .build-char-header { padding: 12px 14px; gap: 10px; }
+    .build-char-name { font-size: 16px; }
+    .map-tabs { gap: 4px; }
+    .map-tab-btn { padding: 5px 9px; font-size: 11px; }
+    .skill-cards { gap: 6px; }
+    .skill-card { padding: 6px 10px; }
+    .skill-card-icon, .skill-card-icon-placeholder { width: 30px; height: 30px; font-size: 14px; }
+    .skill-card-name { font-size: 12px; }
+    .build-grid { grid-template-columns: 1fr; }
+
+    /* tables */
+    .tbl-wrap { border-radius: 8px; }
     td, th { padding: 8px 10px; font-size: 12px; }
-    .login-box { padding: 32px 24px; margin: 16px; }
-    header { padding: 36px 20px 30px; }
+    .grid { grid-template-columns: 1fr 1fr; }
+
+    /* login */
+    .login-box { padding: 28px 20px; margin: 12px; max-width: calc(100% - 24px); }
+    .login-box .lb-logo { font-size: 17px; }
+    .login-box .lb-emblem img { width: 64px; height: 64px; }
   }
+
+  @media(max-width:480px) {
+    .tab-btn { padding: 10px 6px; font-size: 10px; }
+    .grid { grid-template-columns: 1fr; }
+    .char-list { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
+    .char-avatar { width: 38px; height: 38px; }
+    .map-tab-btn { padding: 5px 7px; font-size: 10px; }
+    .section-title { font-size: 11px; }
+  }
+
+  /* ══ SKILL CARDS ══ */
+  .skill-section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 10px; margin-top: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .skill-section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .skill-cards {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;
+  }
+  .skill-card {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px;
+    min-width: 0; transition: border-color .15s;
+  }
+  .skill-card:hover { border-color: var(--border2); }
+  .skill-card.sk-active { border-color: var(--teal); background: rgba(62,207,178,0.06); }
+  .skill-card.sk-passive { border-color: var(--purple); background: rgba(192,125,224,0.06); }
+  .skill-card-icon {
+    width: 36px; height: 36px; border-radius: 6px;
+    object-fit: cover; flex-shrink: 0;
+    background: var(--panel2);
+  }
+  .skill-card-icon-placeholder {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: var(--panel2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .skill-card-name {
+    font-size: 13px; font-weight: 500; color: var(--white);
+    line-height: 1.3;
+  }
+  .skill-card-tag {
+    font-size: 10px; color: var(--muted); margin-top: 2px;
+  }
+  .skill-card.sk-active .skill-card-name { color: var(--teal); }
+  .skill-card.sk-passive .skill-card-name { color: var(--purple); }
+
+  /* ══ END SKILL CARDS ══ */
+  /* ══ BiS SUBNAV ══ */
+  .bis-subnav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 22px; padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bis-btn {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    cursor: pointer; font-family: inherit;
+    transition: all .15s;
+  }
+  .bis-btn:hover { color: var(--text); border-color: var(--border2); }
+  .bis-btn.active { background: rgba(201,168,76,.12); color: var(--gold); border-color: var(--gold-dim); }
+  .bis-panel { display: none; animation: fadeIn .18s ease; }
+  .bis-panel.active { display: block; }
+
+  /* ══ TUTORIAIS ══ */
+  .tut-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; margin-bottom: 16px;
+  }
+  .tut-card-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; cursor: pointer;
+    transition: background .15s;
+  }
+  .tut-card-header:hover { background: rgba(255,255,255,.02); }
+  .tut-card-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(201,168,76,.12); color: var(--gold);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tut-card-title { font-size: 14px; font-weight: 600; color: var(--white); flex: 1; }
+  .tut-card-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .tut-card-arrow { color: var(--muted); font-size: 18px; transition: transform .2s; }
+  .tut-card.open .tut-card-arrow { transform: rotate(90deg); }
+  .tut-card-body { display: none; border-top: 1px solid var(--border); }
+  .tut-card.open .tut-card-body { display: block; }
+  .tut-card-video { padding: 16px 18px; }
+
+  /* vídeo local (tag video) */
+  .tut-video-local {
+    width: 100%; border-radius: 8px; background: #000;
+    max-height: 480px; display: block;
+  }
+  /* vídeo YouTube */
+  .tut-yt-wrap {
+    position: relative; width: 100%; border-radius: 8px; overflow: hidden;
+    cursor: pointer; background: #000;
+  }
+  .tut-yt-thumb { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; opacity: .85; transition: opacity .2s; }
+  .tut-yt-wrap:hover .tut-yt-thumb { opacity: 1; }
+  .tut-yt-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+  .tut-yt-play { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,0,0,.85); display: flex; align-items: center; justify-content: center; transition: transform .2s, background .2s; box-shadow: 0 4px 24px rgba(0,0,0,.5); }
+  .tut-yt-wrap:hover .tut-yt-play { transform: scale(1.1); background: #ff0000; }
+  .tut-yt-play svg { width: 26px; height: 26px; fill: #fff; margin-left: 4px; }
+  .tut-yt-lbl { color: #fff; font-size: 13px; font-weight: 600; background: rgba(0,0,0,.45); padding: 4px 12px; border-radius: 20px; }
+
+  .tut-card-actions { display: flex; gap: 8px; padding: 0 18px 14px; }
+  .tut-edit-btn { font-size: 12px; color: var(--teal); background: rgba(62,207,178,.08); border: 1px solid rgba(62,207,178,.2); border-radius: 5px; padding: 4px 12px; cursor: pointer; font-family: inherit; }
+  .tut-del-btn  { font-size: 12px; color: var(--red);  background: rgba(224,92,92,.08);  border: 1px solid rgba(224,92,92,.2);  border-radius: 5px; padding: 4px 12px; cursor: pointer; font-family: inherit; }
+
+  /* Formulário */
+  .tut-add-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px; margin-bottom: 14px;
+    display: none;
+  }
+  .tut-add-box.show { display: block; animation: fadeIn .2s ease; }
+  .tut-form-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
+  .tut-field { margin-bottom: 14px; }
+  .tut-field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .tut-field input, .tut-field textarea {
+    width: 100%; padding: 9px 13px; background: var(--panel);
+    border: 1px solid var(--border2); border-radius: 7px;
+    color: var(--white); font-size: 13px; font-family: inherit;
+    outline: none; transition: border-color .2s;
+  }
+  .tut-field input:focus, .tut-field textarea:focus { border-color: var(--gold); }
+  .tut-field textarea { resize: vertical; min-height: 72px; }
+  .tut-upload-area {
+    border: 1px dashed var(--border2); border-radius: 7px;
+    padding: 16px; text-align: center; cursor: pointer;
+    color: var(--muted); font-size: 13px; transition: border-color .2s, background .2s;
+  }
+  .tut-upload-area:hover { border-color: var(--gold); background: rgba(201,168,76,.04); color: var(--gold); }
+  .tut-save-btn {
+    padding: 9px 20px; background: linear-gradient(135deg,#a87c28,#c9a84c);
+    border: none; border-radius: 7px; color: #0a0b0d;
+    font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;
+  }
+  .tut-cancel-btn {
+    padding: 9px 16px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 7px; color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer;
+  }
+  .tut-new-btn {
+    width: 100%; padding: 11px; background: rgba(201,168,76,.07);
+    border: 1px dashed var(--gold-dim); border-radius: 8px;
+    color: var(--gold); font-size: 13px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: background .2s;
+  }
+  .tut-new-btn:hover { background: rgba(201,168,76,.16); border-color: var(--gold); }
+
+  /* Admin lock */
+  .tut-lock-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-top: 3px solid var(--gold); border-radius: 10px;
+    padding: 28px 24px; margin-bottom: 14px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px; text-align: center;
+  }
+  .tut-lock-icon { font-size: 32px; }
+  .tut-lock-title { font-size: 15px; font-weight: 700; color: var(--white); }
+  .tut-lock-sub { font-size: 13px; color: var(--muted); }
+  .tut-lock-box input {
+    width: 100%; max-width: 280px; padding: 9px 14px;
+    background: var(--panel); border: 1px solid var(--border2);
+    border-radius: 7px; color: var(--white); font-size: 14px;
+    font-family: inherit; outline: none; text-align: center;
+    transition: border-color .2s;
+  }
+  .tut-lock-box input:focus { border-color: var(--gold); }
+  .tut-lock-btn {
+    padding: 9px 24px; background: linear-gradient(135deg,#a87c28,#c9a84c);
+    border: none; border-radius: 7px; color: #0a0b0d;
+    font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;
+  }
+  .tut-lock-err { color: #e07575; font-size: 12px; display: none; }
+  .tut-lock-err.show { display: block; }
+
+  .tut-admin-trigger {
+    background: none; border: none; color: var(--border2);
+    font-size: 11px; cursor: pointer; font-family: inherit;
+    margin-top: 24px; display: block; text-align: center;
+    width: 100%; transition: color .2s;
+  }
+  .tut-admin-trigger:hover { color: var(--muted); }
+
+  .tut-admin-out-btn {
+    font-size: 11px; color: var(--muted); background: none;
+    border: 1px solid var(--border); border-radius: 5px;
+    padding: 3px 10px; cursor: pointer; font-family: inherit;
+    float: right; margin-top: -2px;
+  }
+  .tut-admin-out-btn:hover { color: var(--red); border-color: var(--red); }
+
+  .tut-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0; }
+
+  /* end responsive */
 </style>
 </head>
 <body>
@@ -535,21 +797,30 @@
 <!-- ══ TABS ══ -->
 <div class="tabs-wrap">
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('cartas', this)">🃏 Cartas</button>
-    <button class="tab-btn" onclick="switchTab('coordi', this)">👘 SR's</button>
-    <button class="tab-btn" onclick="switchTab('props', this)">⬡ Propriedades Fort. (Void)</button>
-    <button class="tab-btn" onclick="switchTab('despertar', this)">✨ Despertar & Runas</button>
-    <button class="tab-btn" onclick="switchTab('titulos', this)">🏅 Títulos</button>
-    <button class="tab-btn" onclick="switchTab('opcional', this)">📋 Pontos Chase LVL</button>
+    <button class="tab-btn active" onclick="switchTab('bis', this)">⭐ BiS (Best in Slot)</button>
     <button class="tab-btn" onclick="switchTab('builds', this)">🧙 Builds</button>
+    <button class="tab-btn" onclick="switchTab('tutoriais', this)">🎬 Tutoriais</button>
   </div>
 </div>
 
 <!-- ══ CONTENT ══ -->
 <div class="content">
 
+<!-- ══ BiS ══ -->
+<div id="tab-bis" class="tab-panel active">
+
+  <!-- Sub-nav inside BiS -->
+  <div class="bis-subnav" id="bis-subnav">
+    <button class="bis-btn active" onclick="switchBis('cartas',this)">🃏 Cartas</button>
+    <button class="bis-btn" onclick="switchBis('coordi',this)">👘 SR's</button>
+    <button class="bis-btn" onclick="switchBis('props',this)">⬡ Adereços</button>
+    <button class="bis-btn" onclick="switchBis('despertar',this)">✨ Despertar & Runas</button>
+    <button class="bis-btn" onclick="switchBis('titulos',this)">🏅 Títulos</button>
+    <button class="bis-btn" onclick="switchBis('opcional',this)">📋 Chase LVL</button>
+  </div>
+
 <!-- ══ CARTAS ══ -->
-<div id="tab-cartas" class="tab-panel active">
+<div id="bis-cartas" class="bis-panel active">
 
   <div class="section">
     <div class="section-title">Melhor Carta por Slot (BiS)</div>
@@ -675,7 +946,7 @@
 </div>
 
 <!-- ══ COORDI ══ -->
-<div id="tab-coordi" class="tab-panel">
+<div id="bis-coordi" class="bis-panel">
   <div class="section">
     <div class="section-title">SR's por Slot</div>
     <p class="coordi-note">Use <strong>Chance Crítica</strong> até atingir 120%+ → a partir daí troque pelo de <strong>Dano Crítico</strong></p>
@@ -708,9 +979,9 @@
 </div>
 
 <!-- ══ PROPS ══ -->
-<div id="tab-props" class="tab-panel">
+<div id="bis-props" class="bis-panel">
   <div class="section">
-    <div class="section-title">Propriedades de Fortificação do Void — Bom vs Melhor</div>
+    <div class="section-title">Adereços Void — Bom vs Melhor</div>
     <div class="grid">
       <div class="card">
         <div class="c-slot">Capacete</div>
@@ -752,7 +1023,7 @@
 </div>
 
 <!-- ══ DESPERTAR & RUNAS ══ -->
-<div id="tab-despertar" class="tab-panel">
+<div id="bis-despertar" class="bis-panel">
 
   <div class="section">
     <div class="section-title">Stats de Despertar</div>
@@ -861,7 +1132,7 @@
 </div>
 
 <!-- ══ TÍTULOS ══ -->
-<div id="tab-titulos" class="tab-panel">
+<div id="bis-titulos" class="bis-panel">
   <div class="section">
     <div class="section-title">Títulos BiS</div>
     <div class="tbl-wrap">
@@ -920,7 +1191,7 @@
         <tbody>
           <tr>
             <td class="slot">A Rebelião das Mascotes</td>
-            <td class="stat">Chance Crítica + 10% Dano em Equipe</td>
+            <td class="stat">Velocidade aumentada + 10% Dano em Equipe</td>
             <td class="loc">Rebelião das Mascotes</td>
             <td class="loc">Incubadora / Maquinista Infernal</td>
           </tr>
@@ -928,7 +1199,7 @@
             <td class="slot">Maquinista Infernal</td>
             <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
             <td class="loc">Expresso de Hades 301</td>
-            <td class="loc">Harrier / Maquinista Infernal</td>
+            <td class="loc">Harrier / A Rebelião das Mascotes</td>
           </tr>
           <tr>
             <td class="slot">O dia do julgamento</td>
@@ -943,7 +1214,7 @@
 </div>
 
 <!-- ══ CHASE LVL ══ -->
-<div id="tab-opcional" class="tab-panel">
+<div id="bis-opcional" class="bis-panel">
 
   <div class="section">
     <div class="section-title">🔵 Pontos Chase LVL — Chars de MP</div>
@@ -968,7 +1239,7 @@
           <tr><td class="slot">11</td><td class="stat">Aumento de HP Máx. +0.5%</td><td class="loc">—</td></tr>
           <tr><td class="slot">12</td><td class="stat">Defesa +6</td><td class="loc">—</td></tr>
           <tr><td class="slot">13</td><td class="stat">Ganho Adicional de GP +1%</td><td class="loc">—</td></tr>
-        </tbody> 
+        </tbody>
       </table>
     </div>
   </div>
@@ -996,12 +1267,14 @@
           <tr><td class="slot">11</td><td class="stat">Aumento de HP Máx. +0.5%</td><td class="loc">—</td></tr>
           <tr><td class="slot">12</td><td class="stat">Defesa +6</td><td class="loc">—</td></tr>
           <tr><td class="slot">13</td><td class="stat">Ganho Adicional de GP +1%</td><td class="loc">—</td></tr>
-        </tbody>MP no Início +0.6
+        </tbody>
       </table>
     </div>
   </div>
 
-</div>
+</div><!-- /bis-opcional -->
+
+</div><!-- /tab-bis -->
 
 <!-- ══ BUILDS ══ -->
 <div id="tab-builds" class="tab-panel">
@@ -1045,6 +1318,14 @@
   </div>
 </div>
 
+<!-- ══ TUTORIAIS ══ -->
+<div id="tab-tutoriais" class="tab-panel">
+  <div class="section">
+    <div class="section-title">📚 Tutoriais da Guilda</div>
+    <div id="tut-list"></div>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <footer>
@@ -1054,7 +1335,7 @@
 <script>
 (function(){
   /* ── LOGIN ── */
-const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"aWthdGlh","s":"Z3VpbGRhcGllY2U="},{"n":"a3VtYQ==","s":"Z3VpbGRhcGllY2U="},{"n":"TWFmaWFhYm0=","s":"Z3VpbGRhcGllY2U="},{"n":"RXRoZXJuaW5n","s":"Z3VpbGRhcGllY2U="},{"n":"S2lkb2thd2E=","s":"Z3VpbGRhcGllY2U="}];
+  const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"bXZrdW1h","s":"cGllY2UxNDEx"},{"n":"aWthdGlh","s":"MTIz"},{"n":"dmVpZ3Vpbmhhcw==","s":"cGV0aXN0YQ=="},{"n":"a2lkb2thd2E=","s":"MTIz"},{"n":"ZXRoZXJuaW5n","s":"MTIz"},{"n":"Y2t0bw==","s":"MTIz"},{"n":"bWFmaWFhYm0=","s":"dGVycmFwbGFuaXN0YQ=="}];
   function _чk(_i,_p){return _DATA.some(_e=>atob(_e.n).toLowerCase()===_i.toLowerCase()&&atob(_e.s)===_p)}
   window['doLogin']=function(){
     const _n=document.getElementById('inp-nome').value.trim();
@@ -1126,49 +1407,228 @@ const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"aWthdGlh","s":"Z3VpbG
        }
   ══════════════════════════════════════════════════════════ */
 
-  function eb() { return { void1:{classe:'',skills:'',obs:''}, void2:{classe:'',skills:'',obs:''}, void3:{classe:'',skills:'',obs:''}, void4:{classe:'',skills:'',obs:''}, tod:{classe:'',skills:'',obs:''}, abissal:{classe:'',skills:'',obs:''} }; }
+  /* ══════════════════════════════════════════════════════════
+     ESTRUTURA DE BUILD — COMO PREENCHER:
+     ──────────────────────────────────────────────────────────
+     Para cada mapa (void1, void2, void3, void4, tod, abissal):
+
+       classe:   'Nome da Classe'
+       obs:      'Observação geral'
+
+       skills: array de skills ATIVAS usadas:
+         { nome: 'Nome da Skill', icone: 'arquivo.png', tag: 'Tipo 1' }
+         → icone: nome do arquivo de imagem (coloque na mesma pasta do index.html)
+         → tag: opcional, ex: 'Tipo 1', 'Tipo 2', 'Principal'
+         → deixe icone:'' para mostrar emoji padrão ⚡
+
+       passivas: array de passivas usadas:
+         { nome: 'Nome da Passiva', icone: 'arquivo.png', tag: 'Descrição curta' }
+         → mesmo formato das skills
+         → deixe icone:'' para mostrar emoji padrão 🔮
+
+     EXEMPLO:
+       void1:{
+         classe: 'Prime Knight',
+         obs: 'Foca nas habilidades de área',
+         skills: [
+           { nome: '1ª Habilidade', icone: 'sk_elesis_1.png', tag: 'Tipo 2' },
+           { nome: '4ª Habilidade', icone: 'sk_elesis_4.png', tag: 'Principal' },
+         ],
+         passivas: [
+           { nome: 'Instinto Guerreiro', icone: 'pas_elesis_1.png', tag: '' },
+           { nome: 'Fúria Ardente',      icone: '',                 tag: '' },
+         ]
+       }
+  ══════════════════════════════════════════════════════════ */
+
+  function eb() {
+    const m = () => ({ classe:'', obs:'', skills:[], passivas:[] });
+    return { void1:m(), void2:m(), void3:m(), void4:m(), tod:m(), abissal:m() };
+  }
+
+  /* Converte formato antigo (skills como string) para novo (array) — retrocompatível */
+  function normalizeBuild(b) {
+    const out = {};
+    ['void1','void2','void3','void4','tod','abissal'].forEach(map => {
+      const raw = b[map] || {};
+      let skills = raw.skills || [];
+      let passivas = raw.passivas || [];
+      // se ainda for string (formato antigo), converte
+      if (typeof skills === 'string') {
+        skills = skills ? skills.split(',').map(s => ({ nome: s.trim(), icone: '', tag: '' })) : [];
+      }
+      if (typeof passivas === 'string') {
+        passivas = passivas ? passivas.split(',').map(p => ({ nome: p.trim(), icone: '', tag: '' })) : [];
+      }
+      out[map] = { classe: raw.classe||'', obs: raw.obs||'', video: raw.video||'', skills, passivas };
+    });
+    return out;
+  }
 
   const CHARS = [
-    { id:'elesis',   name:'Elesis',   icon:'🗡️',  foto:'elesis.png', builds: {
-    void1:{ classe:'1 Classe', skills:'1ª Hab, 2ª Hab, 4ª Hab', obs:'Use a 3ª no boss' },
-    void2:{ classe:'Prime Knight', skills:'2ª Hab, 4ª Hab',         obs:'' },
-    void3:{ classe:'Prime Knight', skills:'4ª Hab',                  obs:'Foca no boss' },
-    void4:{ classe:'Prime Knight', skills:'4ª Hab, 2ª Hab',         obs:'' },
-    tod:  { classe:'Prime Knight', skills:'1ª Hab, 3ª Hab',         obs:'' },
-    abissal:{ classe:'Prime Knight', skills:'4ª Hab',               obs:'Build defensiva' },
-    }
-  },
-    { id:'lire',     name:'Lire',     icon:'🏹',  foto:'lire.png', builds: eb() },
-    { id:'arme',     name:'Arme',     icon:'🔮',  foto:'arme.png', builds: eb() },
-    { id:'lass',     name:'Lass',     icon:'🌙',  foto:'lass.png', builds: eb() },
-    { id:'ryan',     name:'Ryan',     icon:'🐾',  foto:'ryan.png', builds: eb() },
-    { id:'ronan',    name:'Ronan',    icon:'🛡️',  foto:'Ronan.png', builds: eb() },
-    { id:'amy',      name:'Amy',      icon:'🎵',  foto:'Amy.png', builds: eb() },
-    { id:'jin',      name:'Jin',      icon:'🥋',  foto:'Jin.png', builds: eb() },
-    { id:'sieghart', name:'Sieghart', icon:'⚔️',  foto:'sieg.png', builds: eb() },
-    { id:'mari',     name:'Mari',     icon:'🤖',  foto:'mari.png', builds: eb() },
-    { id:'dio',      name:'Dio',      icon:'😈',  foto:'dio.png', builds: eb() },
-    { id:'zero',     name:'Zero',     icon:'⚖️',  foto:'zero.png', builds: eb() },
-    { id:'rey',      name:'Rey',      icon:'🌊',  foto:'rey.png', builds: eb() },
-    { id:'lupus',    name:'Lupus',    icon:'🐺',  foto:'lupus.png', builds: eb() },
-    { id:'lin',      name:'Lin',      icon:'🦊',  foto:'lin.png', builds: eb() },
-    { id:'azin',     name:'Azin',     icon:'🌪️',  foto:'azin.png', builds: eb() },
-    { id:'holy',     name:'Holy',     icon:'✨',  foto:'holy.png', builds: eb() },
-    { id:'edel',     name:'Edel',     icon:'🌹',  foto:'Edel.png', builds: eb() },
-    { id:'veigas',   name:'Veigas',   icon:'🔥',  foto:'veigas.png', builds: eb() },
-    { id:'decane',   name:'Decane',   icon:'❄️',  foto:'Decane.png', builds: eb() },
-    { id:'ai',       name:'Ai',       icon:'💎',  foto:'Ai.png', builds: eb() },
-    { id:'kallia',   name:'Kallia',   icon:'🌸',  foto:'kallia.png', builds: eb() },
-    { id:'uno',      name:'Uno',      icon:'🃏',  foto:'uno.png', builds: eb() },
-    { id:'iris',     name:'Iris',     icon:'🌈',  foto:'Iris.png', builds: {
-    void1:{ classe:'Classe única', skills:'Pula Pula! TIPO 1, Queda Luffy!, Cores BAM BAM! TIPO 2, Sonho Estelar! TIPO 2, Wadada Festa!', obs:'A Skill principal será a Queda Luffy, onde voce irá spammar ela ao máximo, quando não puder pode soltar as outras.' },
-    void2:{ classe:'Classe única', skills:'Pula Pula! TIPO 2, Queda Luffy!, Cores BAM BAM! TIPO 1, Sonho Estelar! TIPO 1, Wadada Festa!',         obs:'Void 2 assim como o Void 1, voce irá usar bem a Queda Luffy, porém terá que se posicionar corretamente para que as cabeças laterias sejam destruidas e que voce consiga coletar a ORB, em caso de duvida consulte o Frotz de como fazer isso in game.' },
-    void3:{ classe:'Classe única', skills:'Pula Pula! TIPO 2, Sonho Estelar! TIPO 1, Cores BAM BAM! TIPO 1, Hora do Luffy! TIPO 1, Wadada Festa!',                  obs:'No Void 3 iremos focar na Sonho Estelar, ela é a que mais irá da dano na fase, tanto nos cristais quando no 2f e 3f' },
-    void4:{ classe:'Classe única', skills:'em breve',         obs:'' },
-    tod:  { classe:'Classe única', skills:'Pincelada Pow! TIPO 2, Sonho Estelar! TIPO 1, Cores BAM BAM! TIPO 1, Eu te Protejo! TIPO 2, Explosão de Grafite!',         obs:'Na TOD no modo Dificil (10f) irá depender da PT, mas no geral a iris será um suporte de dano, ou seja, voce focará em matar o gaicoz com a Cores BAM BAM, na Kamiki você derrubará ela usando a Pincelada Pow, e no Gadosen vocé matará os dois com a Explosão de Grafite, na Cazeaje focará em nao morrer e usar o despertar, em caso de necessidade use o "Eu te Protejo" para que consiga dar ataque basico sem morrer.' },
-    abissal:{ classe:'Classe única', skills:'Pula Pula! TIPO 2, Queda Luffy!, Sonho Estelar! TIPO 1, Cores BAM BAM! TIPO 2, Wadada Festa!',  obs:'Use a Queda Luffy e Cores Bam Bam, para ajudar na limpeza de mapa, use Wadada Festa no Ceifeiro, e spamme Queda Luffy no Dominador Abissal' },
-    } 
-  },
+    { id:'elesis',   name:'Elesis',   icon:'🗡️',  foto:'elesis.png', builds: normalizeBuild({
+      void1:{ classe:'1 Classe', obs:'Use a 3ª no boss', skills:'1ª Hab, 2ª Hab, 4ª Hab', passivas:[] },
+      void2:{ classe:'Prime Knight', obs:'', skills:'2ª Hab, 4ª Hab', passivas:[] },
+      void3:{ classe:'Prime Knight', obs:'Foca no boss', skills:'4ª Hab', passivas:[] },
+      void4:{ classe:'Prime Knight', obs:'', skills:'4ª Hab, 2ª Hab', passivas:[] },
+      tod:  { classe:'Prime Knight', obs:'', skills:'1ª Hab, 3ª Hab', passivas:[] },
+      abissal:{ classe:'Prime Knight', obs:'Build defensiva', skills:'4ª Hab', passivas:[] },
+    })},
+    { id:'lire',     name:'Lire',     icon:'🏹',  foto:'lire.png',    builds: eb() },
+    { id:'arme',     name:'Arme',     icon:'🔮',  foto:'arme.png',    builds: eb() },
+    { id:'lass',     name:'Lass',     icon:'🌙',  foto:'lass.png',    builds: eb() },
+    { id:'ryan',     name:'Ryan',     icon:'🐾',  foto:'ryan.png',    builds: eb() },
+    { id:'ronan',    name:'Ronan',    icon:'🛡️',  foto:'ronan.png',   builds: eb() },
+    { id:'amy',      name:'Amy',      icon:'🎵',  foto:'amy.png',     builds: eb() },
+    { id:'jin',      name:'Jin',      icon:'🥋',  foto:'jin.png',     builds: eb() },
+    { id:'sieghart', name:'Sieghart', icon:'⚔️',  foto:'sieg.png',    builds: eb() },
+    { id:'mari',     name:'Mari',     icon:'🤖',  foto:'mari.png',    builds: eb() },
+    { id:'dio',      name:'Dio',      icon:'😈',  foto:'dio.png',     builds: eb() },
+    { id:'zero',     name:'Zero',     icon:'⚖️',  foto:'zero.png',    builds: eb() },
+    { id:'rey',      name:'Rey',      icon:'🌊',  foto:'rey.png',     builds: eb() },
+    { id:'lupus',    name:'Lupus',    icon:'🐺',  foto:'lupus.png',   builds: eb() },
+    { id:'lin',      name:'Lin',      icon:'🦊',  foto:'lin.png',     builds: eb() },
+    { id:'azin',     name:'Azin',     icon:'🌪️',  foto:'azin.png',    builds: eb() },
+    { id:'holy',     name:'Holy',     icon:'✨',  foto:'holy.png',    builds: eb() },
+    { id:'edel',     name:'Edel',     icon:'🌹',  foto:'edel.png',    builds: eb() },
+    { id:'veigas',   name:'Veigas',   icon:'🔥',  foto:'veigas.png',  builds: eb() },
+    { id:'decane',   name:'Decane',   icon:'❄️',  foto:'decane.png',  builds: eb() },
+    { id:'ai',       name:'Ai',       icon:'💎',  foto:'ai.png',      builds: eb() },
+    { id:'kallia',   name:'Kallia',   icon:'🌸',  foto:'kallia.png',  builds: eb() },
+    { id:'uno',      name:'Uno',      icon:'🃏',  foto:'uno.png',     builds: eb() },
+    { id:'iris',     name:'Iris',     icon:'🌈',  foto:'iris.png',    builds: normalizeBuild({
+      void1:{ classe:'Classe única', obs:'As skills usadas no video, podem tbm servir como base de build, porém uso as que estao informadas no site.', video:'https://www.youtube.com/watch?v=tQ1pSPCFnlQ',
+        skills:[
+          { nome:'Pula Pula!',       icone:'pulapulatipo1.png', tag:'Tipo 1' },
+          { nome:'Queda Luffy!',     icone:'quedaluffy.png', tag:'' },
+          { nome:'Cores BAM BAM!',   icone:'bambamtipo2.png', tag:'Tipo 2' },
+          { nome:'Sonho Estelar!',   icone:'sonhoestelartipo2.png', tag:'Tipo 2' },
+          { nome:'Wadada Festa!',    icone:'wadadafesta.png', tag:'' },
+        ], passivas:[
+          { nome: 'Tinta Demais!', icone: 'tintademais.png', tag: '' },
+          { nome: 'Vai! Luffy!', icone: 'vailuffy.png', tag: '' },
+          { nome: 'Vai! Luffy! Aprimorado Tipo 1', icone: 'vailuffytipo1.png', tag: '' },
+          { nome: 'Golpe Para Cima Durante o Combo', icone: 'golpepracima.png', tag: '' },
+          { nome: 'Levantando Voo~!', icone: 'levantandovoo.png', tag: '' },
+          { nome: 'Ataque para trás na corrida', icone: 'ataqueparatrascorrida.png', tag: '' },
+          { nome: 'Me ajuda, Luffy!', icone: 'meajudaluffy.png', tag: '' },
+          { nome: 'Luffy! Engole!', icone: 'luffyengole.png', tag: '' },
+          { nome: 'Ataque na Queda', icone: 'ataquenaqueda.png', tag: '' },
+          { nome: 'Levantando Voo~! Aprimorado Tipo 1', icone: 'levantandovootipo1.png', tag: '' },
+          { nome: 'Me ajuda, Luffy! Aprimorado Tipo 1', icone: 'meajudaluffytipo1.png', tag: '' },
+          { nome: 'Luffy! Engole! Aprimorado Tipo 2', icone: 'luffyengoletipo2.png', tag: '' },
+          { nome: 'Mais Tinta!', icone: 'maistinta.png', tag: '' },
+          { nome: 'Pronta para Ir!', icone: 'prontaprair.png', tag: '' },
+          { nome: 'Poder da Criação Nv1', icone: 'poderdacriaçao.png', tag: '' },
+          { nome: 'Poder da Criação Nv2', icone: 'poderdacriaçao2.png', tag: '' },
+          { nome: 'Redução de Tempo Contra Ataque', icone: 'contraataque.png', tag: '' },
+        ] },
+      void2:{ classe:'Classe única', obs:'As skills usadas no video, podem tbm servir como base de build, porém uso as que estao informadas no site.', video:'https://www.youtube.com/watch?v=J0d_G_jQj7s',
+        skills:[
+          { nome:'Pula Pula!',       icone:'pulapulatipo2.png', tag:'Tipo 2' },
+          { nome:'Queda Luffy!',     icone:'quedaluffy.png', tag:'Principal' },
+          { nome:'Cores BAM BAM!',   icone:'bambamtipo1.png', tag:'Tipo 1' },
+          { nome:'Sonho Estelar!',   icone:'sonhoestelartipo1.png', tag:'Tipo 1' },
+          { nome:'Wadada Festa!',    icone:'wadadafesta.png', tag:'' },
+        ], passivas:[
+          { nome: 'Tinta Demais!', icone: 'tintademais.png', tag: '' },
+          { nome: 'Vai! Luffy!', icone: 'vailuffy.png', tag: '' },
+          { nome: 'Vai! Luffy! Aprimorado Tipo 1', icone: 'vailuffytipo1.png', tag: '' },
+          { nome: 'Golpe Para Cima Durante o Combo', icone: 'golpepracima.png', tag: '' },
+          { nome: 'Levantando Voo~!', icone: 'levantandovoo.png', tag: '' },
+          { nome: 'Ataque para trás na corrida', icone: 'ataqueparatrascorrida.png', tag: '' },
+          { nome: 'Me ajuda, Luffy!', icone: 'meajudaluffy.png', tag: '' },
+          { nome: 'Luffy! Engole!', icone: 'luffyengole.png', tag: '' },
+          { nome: 'Ataque na Queda', icone: 'ataquenaqueda.png', tag: '' },
+          { nome: 'Levantando Voo~! Aprimorado Tipo 1', icone: 'levantandovootipo1.png', tag: '' },
+          { nome: 'Me ajuda, Luffy! Aprimorado Tipo 1', icone: 'meajudaluffytipo1.png', tag: '' },
+          { nome: 'Luffy! Engole! Aprimorado Tipo 2', icone: 'luffyengoletipo2.png', tag: '' },
+          { nome: 'Mais Tinta!', icone: 'maistinta.png', tag: '' },
+          { nome: 'Pronta para Ir!', icone: 'prontaprair.png', tag: '' },
+          { nome: 'Poder da Criação Nv1', icone: 'poderdacriaçao.png', tag: '' },
+          { nome: 'Poder da Criação Nv2', icone: 'poderdacriaçao2.png', tag: '' },
+          { nome: 'Redução de Tempo Contra Ataque', icone: 'contraataque.png', tag: '' },
+        ] },
+      void3:{ classe:'Classe única', obs:'As skills usadas no video, podem tbm servir como base de build, porém uso as que estao informadas no site.',  video:'https://youtu.be/Gnyn_Hhz2aU',
+        skills:[
+          { nome:'Pula Pula!',       icone:'pulapulatipo2.png', tag:'Tipo 2' },
+          { nome:'Sonho Estelar!',   icone:'sonhoestelartipo1.png', tag:'Tipo 1' },
+          { nome:'Cores BAM BAM!',   icone:'bambamtipo1.png', tag:'Tipo 1' },
+          { nome:'Hora do Luffy!',   icone:'horaluffytipo1.png', tag:'Tipo 1' },
+          { nome:'Wadada Festa!',    icone:'wadadafesta.png', tag:'' },
+        ], passivas:[
+          { nome: 'Tinta Demais!', icone: 'tintademais.png', tag: '' },
+          { nome: 'Vai! Luffy!', icone: 'vailuffy.png', tag: '' },
+          { nome: 'Vai! Luffy! Aprimorado Tipo 1', icone: 'vailuffytipo1.png', tag: '' },
+          { nome: 'Golpe Para Cima Durante o Combo', icone: 'golpepracima.png', tag: '' },
+          { nome: 'Levantando Voo~!', icone: 'levantandovoo.png', tag: '' },
+          { nome: 'Ataque para trás na corrida', icone: 'ataqueparatrascorrida.png', tag: '' },
+          { nome: 'Me ajuda, Luffy!', icone: 'meajudaluffy.png', tag: '' },
+          { nome: 'Luffy! Engole!', icone: 'luffyengole.png', tag: '' },
+          { nome: 'Ataque na Queda', icone: 'ataquenaqueda.png', tag: '' },
+          { nome: 'Levantando Voo~! Aprimorado Tipo 1', icone: 'levantandovootipo1.png', tag: '' },
+          { nome: 'Me ajuda, Luffy! Aprimorado Tipo 1', icone: 'meajudaluffytipo1.png', tag: '' },
+          { nome: 'Luffy! Engole! Aprimorado Tipo 2', icone: 'luffyengoletipo2.png', tag: '' },
+          { nome: 'Mais Tinta!', icone: 'maistinta.png', tag: '' },
+          { nome: 'Pronta para Ir!', icone: 'prontaprair.png', tag: '' },
+          { nome: 'Poder da Criação Nv1', icone: 'poderdacriaçao.png', tag: '' },
+          { nome: 'Poder da Criação Nv2', icone: 'poderdacriaçao2.png', tag: '' },
+          { nome: 'Redução de Tempo Contra Ataque', icone: 'contraataque.png', tag: '' },
+        ] },
+      void4:{ classe:'Classe única', obs:'', skills:[{ nome:'Em breve', icone:'', tag:'' }], passivas:[] },
+      tod:{ classe:'Classe única', obs:'As skills usadas no video, podem tbm servir como base de build, porém uso as que estao informadas no site.', video:'https://www.youtube.com/watch?v=VXNoLh3FAaY',
+        skills:[
+          { nome:'Pincelada Pow!',        icone:'pinceladatipo2.png', tag:'Tipo 2' },
+          { nome:'Sonho Estelar!',        icone:'sonhoestelartipo1.png', tag:'Tipo 1' },
+          { nome:'Cores BAM BAM!',        icone:'bambamtipo1.png', tag:'Tipo 1' },
+          { nome:'Eu te Protejo!',        icone:'euteprotejotipo2.png', tag:'Tipo 2' },
+          { nome:'Explosão de Grafite!',  icone:'explosaografite.png', tag:'' },
+        ], passivas:[
+          { nome: 'Tinta Demais!', icone: 'tintademais.png', tag: '' },
+          { nome: 'Vai! Luffy!', icone: 'vailuffy.png', tag: '' },
+          { nome: 'Vai! Luffy! Aprimorado Tipo 1', icone: 'vailuffytipo1.png', tag: '' },
+          { nome: 'Golpe Para Cima Durante o Combo', icone: 'golpepracima.png', tag: '' },
+          { nome: 'Levantando Voo~!', icone: 'levantandovoo.png', tag: '' },
+          { nome: 'Ataque para trás na corrida', icone: 'ataqueparatrascorrida.png', tag: '' },
+          { nome: 'Me ajuda, Luffy!', icone: 'meajudaluffy.png', tag: '' },
+          { nome: 'Luffy! Engole!', icone: 'luffyengole.png', tag: '' },
+          { nome: 'Ataque na Queda', icone: 'ataquenaqueda.png', tag: '' },
+          { nome: 'Levantando Voo~! Aprimorado Tipo 1', icone: 'levantandovootipo1.png', tag: '' },
+          { nome: 'Me ajuda, Luffy! Aprimorado Tipo 1', icone: 'meajudaluffytipo1.png', tag: '' },
+          { nome: 'Luffy! Engole! Aprimorado Tipo 2', icone: 'luffyengoletipo2.png', tag: '' },
+          { nome: 'Mais Tinta!', icone: 'maistinta.png', tag: '' },
+          { nome: 'Pronta para Ir!', icone: 'prontaprair.png', tag: '' },
+          { nome: 'Poder da Criação Nv1', icone: 'poderdacriaçao.png', tag: '' },
+          { nome: 'Poder da Criação Nv2', icone: 'poderdacriaçao2.png', tag: '' },
+          { nome: 'Redução de Tempo Contra Ataque', icone: 'contraataque.png', tag: '' },
+        ] },
+      abissal:{ classe:'Classe única', obs:'As skills usadas no video, podem tbm servir como base de build, porém uso as que estao informadas no site.', video:'https://www.youtube.com/watch?v=tnfOCBAVU5s',
+        skills:[
+          { nome:'Pula Pula!',       icone:'pulapulatipo2.png', tag:'Tipo 2' },
+          { nome:'Queda Luffy!',     icone:'quedaluffy.png', tag:'Principal' },
+          { nome:'Sonho Estelar!',   icone:'sonhoestelartipo1.png', tag:'Tipo 1' },
+          { nome:'Cores BAM BAM!',   icone:'bambamtipo2', tag:'Tipo 2' },
+          { nome:'Wadada Festa!',    icone:'wadadafesta.png', tag:'' },
+        ], passivas:[
+          { nome: 'Tinta Demais!', icone: 'tintademais.png', tag: '' },
+          { nome: 'Vai! Luffy!', icone: 'vailuffy.png', tag: '' },
+          { nome: 'Vai! Luffy! Aprimorado Tipo 1', icone: 'vailuffytipo1.png', tag: '' },
+          { nome: 'Golpe Para Cima Durante o Combo', icone: 'golpepracima.png', tag: '' },
+          { nome: 'Levantando Voo~!', icone: 'levantandovoo.png', tag: '' },
+          { nome: 'Ataque para trás na corrida', icone: 'ataqueparatrascorrida.png', tag: '' },
+          { nome: 'Me ajuda, Luffy!', icone: 'meajudaluffy.png', tag: '' },
+          { nome: 'Luffy! Engole!', icone: 'luffyengole.png', tag: '' },
+          { nome: 'Ataque na Queda', icone: 'ataquenaqueda.png', tag: '' },
+          { nome: 'Levantando Voo~! Aprimorado Tipo 1', icone: 'levantandovootipo1.png', tag: '' },
+          { nome: 'Me ajuda, Luffy! Aprimorado Tipo 1', icone: 'meajudaluffytipo1.png', tag: '' },
+          { nome: 'Luffy! Engole! Aprimorado Tipo 2', icone: 'luffyengoletipo2.png', tag: '' },
+          { nome: 'Mais Tinta!', icone: 'maistinta.png', tag: '' },
+          { nome: 'Pronta para Ir!', icone: 'prontaprair.png', tag: '' },
+          { nome: 'Poder da Criação Nv1', icone: 'poderdacriaçao.png', tag: '' },
+          { nome: 'Poder da Criação Nv2', icone: 'poderdacriaçao2.png', tag: '' },
+          { nome: 'Redução de Tempo Contra Ataque', icone: 'contraataque.png', tag: '' },
+        ] },
+    })},
     { id:'novo',     name:'???',      icon:'❓',  foto:'', isNew:true, builds: eb() },
   ];
 
@@ -1223,12 +1683,29 @@ const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"aWthdGlh","s":"Z3VpbG
     renderMapBuild();
   };
 
+  function renderSkillCards(arr, tipo) {
+    if (!arr || arr.length === 0) return `<p style="color:var(--muted);font-size:13px;padding:4px 0">— Nenhuma cadastrada —</p>`;
+    return arr.map(s => {
+      const iconHtml = s.icone
+        ? `<img src="${s.icone}" alt="${s.nome}" class="skill-card-icon">`
+        : `<div class="skill-card-icon-placeholder">${tipo === 'skill' ? '⚡' : '🔮'}</div>`;
+      return `
+        <div class="skill-card ${tipo === 'skill' ? 'sk-active' : 'sk-passive'}">
+          ${iconHtml}
+          <div>
+            <div class="skill-card-name">${s.nome}</div>
+            ${s.tag ? `<div class="skill-card-tag">${s.tag}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
   function renderMapBuild() {
     const container = document.getElementById('map-build-content');
     if (!currentChar) return;
     const b = currentChar.builds[currentMap];
     const mapName = MAP_NAMES[currentMap];
-    const isEmpty = !b.classe && !b.skills && !b.obs;
+    const isEmpty = !b.classe && (!b.skills || b.skills.length === 0) && (!b.passivas || b.passivas.length === 0) && !b.obs && !b.video;
 
     if (isEmpty) {
       container.innerHTML = `
@@ -1239,22 +1716,151 @@ const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"aWthdGlh","s":"Z3VpbG
       return;
     }
 
+    // Extract YouTube video ID
+    function getYtId(url) {
+      if (!url) return '';
+      const s = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+      if (s) return s[1];
+      const l = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+      if (l) return l[1];
+      return '';
+    }
+    const ytId    = getYtId(b.video);
+    const ytLink  = b.video ? b.video.split('?')[0] : '';
+    const ytThumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '';
+
     container.innerHTML = `
-      <div class="build-grid">
-        <div class="build-box">
-          <div class="build-box-title">🎭 Classe Recomendada</div>
-          <div class="build-box-val"><span class="highlight">${b.classe || '—'}</span></div>
-        </div>
-        <div class="build-box">
-          <div class="build-box-title">⚡ Skills Principais</div>
-          <div class="build-box-val hi-teal">${(b.skills || '—').replace(/,/g,'<br>')}</div>
-        </div>
+      <div class="build-box" style="margin-bottom:12px">
+        <div class="build-box-title">🎭 Classe Recomendada</div>
+        <div class="build-box-val"><span class="highlight">${b.classe || '—'}</span></div>
       </div>
-      ${b.obs ? `<div class="build-note"><strong>💡 Observações:</strong> ${b.obs}</div>` : ''}
+
+      <div class="skill-section-label">⚡ Skills Ativas</div>
+      <div class="skill-cards">${renderSkillCards(b.skills, 'skill')}</div>
+
+      <div class="skill-section-label">🔮 Passivas</div>
+      <div class="skill-cards">${renderSkillCards(b.passivas, 'passiva')}</div>
+
+      ${ytId ? `
+      <div class="skill-section-label">🎬 Vídeo Guia</div>
+      <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener" style="text-decoration:none">
+        <div class="build-video-wrap">
+          <img class="build-video-thumb" src="${ytThumb}" alt="Thumbnail do vídeo" onerror="this.style.background='#111';this.style.minHeight='180px';">
+          <div class="build-video-overlay">
+            <div class="build-video-play">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="build-video-label">Assistir no YouTube</div>
+          </div>
+        </div>
+      </a>` : ''}
+
+      ${b.obs ? `<div class="build-note" style="margin-top:14px"><strong>💡 Observações:</strong> ${b.obs}</div>` : ''}
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', buildCharList);
+  /* ── BiS sub-nav ── */
+  window['switchBis'] = function(id, btn) {
+    document.querySelectorAll('.bis-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.bis-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('bis-'+id).classList.add('active');
+    btn.classList.add('active');
+  };
+
+  /* ══════════════════════════════════════
+     TUTORIAIS
+     Os tutoriais ficam salvos no
+     localStorage do navegador.
+     Para resetar: abra o console do
+     navegador e rode: localStorage.removeItem('piece_tuts_v1')
+  ══════════════════════════════════════ */
+  /* ══════════════════════════════════════════════════════════
+     TUTORIAIS — COMO ADICIONAR:
+     ──────────────────────────────────────────────────────────
+     Preencha os campos abaixo para cada tutorial:
+
+       titulo:  'Nome do tutorial'
+       desc:    'Descrição curta (opcional, deixe vazio com "")'
+       video:   'https://youtu.be/SEU_LINK'
+                 → qualquer link do YouTube funciona
+                 → deixe '' se não tiver vídeo
+
+     Para adicionar mais tutoriais, copie um bloco { ... },
+     cole antes do comentário final e separe com vírgula.
+  ══════════════════════════════════════════════════════════ */
+
+  const TUTORIAIS = [
+    // ── TUTORIAL 1 ──────────────────────────────
+    {
+      titulo: 'Como abrir 2 Grand chase no mesmo PC (Precisa ter o Windows PRO)',
+      desc:   'Guia completo de como instalar uma VM no PC e abrir 2 grand chase',
+      video:  'https://youtu.be/M_2KWRhb6nY',
+    },
+    // ↑ ADICIONE MAIS TUTORIAIS ACIMA DESTA LINHA ↑
+    // Modelo para copiar:
+    //
+    // {
+    //   titulo: 'Título do Tutorial',
+    //   desc:   'Descrição curta',
+    //   video:  'https://youtu.be/...',
+    // },
+  ];
+
+  /* ── Renderiza os tutoriais ── */
+  function renderTuts() {
+    const el = document.getElementById('tut-list');
+    if (!TUTORIAIS.length) {
+      el.innerHTML = '<div class="tut-empty">Nenhum tutorial cadastrado ainda.</div>';
+      return;
+    }
+    el.innerHTML = TUTORIAIS.map((t, i) => {
+      const ytId = getYtIdTut(t.video);
+      let videoHtml = '';
+      if (ytId) {
+        const thumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+        videoHtml = `
+          <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" style="text-decoration:none">
+            <div class="tut-yt-wrap">
+              <img class="tut-yt-thumb" src="${thumb}" alt="thumb">
+              <div class="tut-yt-overlay">
+                <div class="tut-yt-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="tut-yt-lbl">Assistir no YouTube</div>
+              </div>
+            </div>
+          </a>`;
+      }
+      return `
+        <div class="tut-card" id="tutcard-${i}">
+          <div class="tut-card-header" onclick="toggleTut(${i})">
+            <div class="tut-card-num">${i+1}</div>
+            <div style="flex:1">
+              <div class="tut-card-title">${t.titulo}</div>
+              ${t.desc ? `<div class="tut-card-desc">${t.desc}</div>` : ''}
+            </div>
+            <div class="tut-card-arrow">›</div>
+          </div>
+          ${videoHtml ? `
+          <div class="tut-card-body">
+            <div class="tut-card-video">${videoHtml}</div>
+          </div>` : ''}
+        </div>`;
+    }).join('');
+  }
+
+  function getYtIdTut(url) {
+    if (!url) return '';
+    const s = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (s) return s[1];
+    const l = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (l) return l[1];
+    return '';
+  }
+
+  window['toggleTut'] = function(i) {
+    document.getElementById('tutcard-'+i).classList.toggle('open');
+  };
+
+  document.addEventListener('DOMContentLoaded', () => { buildCharList(); renderTuts(); });
 })();
 </script>
 </body>
